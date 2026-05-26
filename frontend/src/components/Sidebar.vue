@@ -2,12 +2,22 @@
     <aside class="w-full glass border-b border-white/5 flex flex-col md:h-screen md:w-60 md:flex-shrink-0 md:border-b-0 md:border-r">
         <!-- Logo -->
         <div class="p-4 md:p-6">
-            <div class="flex items-center space-x-3">
-                <span class="text-2xl md:text-3xl">🔥</span>
-                <div>
-                    <h1 class="text-lg font-bold text-white">HotPush</h1>
-                    <p class="text-xs text-gray-500">热点聚合推送平台</p>
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl md:text-3xl">🔥</span>
+                    <div>
+                        <h1 class="text-lg font-bold text-white">HotPush</h1>
+                        <p class="text-xs text-gray-500">热点聚合推送平台</p>
+                    </div>
                 </div>
+                <button
+                    v-if="authStore.isAuthenticated"
+                    @click="$emit('logout')"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-gray-500 transition hover:text-red-400 md:hidden"
+                    title="退出登录"
+                >
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
         </div>
 
