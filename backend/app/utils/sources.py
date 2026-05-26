@@ -62,18 +62,18 @@ HOT_SOURCES = {
         "icon": _icon("linux.do"),
         "category": "技术"
     },
+    "nodeseek": {
+        "name": "NodeSeek",
+        "route": "https://www.nodeseek.com/rss.xml",
+        "icon": _icon("nodeseek.com"),
+        "category": "技术"
+    },
 
     # --- 科技资讯 ---
     "sspai": {
         "name": "少数派",
         "route": "/sspai/index",
         "icon": _icon("sspai.com"),
-        "category": "科技资讯"
-    },
-    "pingwest": {
-        "name": "品玩",
-        "route": "/pingwest/status",
-        "icon": _icon("pingwest.com"),
         "category": "科技资讯"
     },
 
@@ -112,8 +112,8 @@ SOURCES_REQUIRE_CONFIG = {}
 # 分类汇总
 CATEGORIES = {
     "热搜榜": ["weibo", "zhihu"],
-    "技术": ["v2ex", "hackernews", "juejin", "linuxdo"],
-    "科技资讯": ["sspai", "pingwest"],
+    "技术": ["v2ex", "hackernews", "juejin", "linuxdo", "nodeseek"],
+    "科技资讯": ["sspai"],
     "视频": ["bilibili"],
     "影视": ["douban_movie"],
     "阅读": ["douban_book"],
