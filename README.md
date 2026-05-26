@@ -10,7 +10,9 @@
 
 ## ✨ 特性
 
-- 🌐 **热点聚合** - 聚合微博、知乎、B站、NodeSeek 等 13 个平台热榜
+- 🌐 **公开热搜榜** - 访问首页即可浏览全网热点，无需登录也能快速体验
+- 🔐 **分级权限** - 热搜公开可见，数据源、推送、规则、用户管理等功能登录后按角色授权
+- 📦 **热点聚合** - 聚合微博、知乎、B站、V2EX、Hacker News、NodeSeek 等多个平台热榜
 - 📨 **多渠道推送** - 支持 Telegram、Discord、企业微信、飞书、钉钉等
 - ⚡ **实时更新** - 分钟级热点监控，第一时间推送新热点
 - 🎯 **智能过滤** - 支持关键词过滤、时间段限制、来源过滤等规则
@@ -27,56 +29,83 @@
 
 **演示地址**：[https://hotpush.dawenzaist.de5.net](https://hotpush.dawenzaist.de5.net)
 
+热搜榜可直接访问，无需登录。需要体验推送配置、数据源、趋势分析等管理功能时，可使用测试账号：
+
 | 账号 | 密码 |
 |------|------|
 | test | test123 |
 
-> ⚠️ 演示账号仅供体验，请勿修改配置。如需完整功能请自行部署。
+> ⚠️ 演示账号仅供体验，权限受限。如需完整管理能力请自行部署。
 
 ## 📸 界面预览
 
-<details>
-<summary><b>🔐 登录页面</b></summary>
-<img src="docs/images/login.png" width="800"/>
+<details open>
+<summary><b>🔥 公开热搜榜 - 未登录也可浏览</b></summary>
+
+访问首页即可查看聚合热点，右上角保留登录/注册入口，侧边栏仅展示公开菜单。
+
+<img src="docs/images/hotlist-public.png" width="800"/>
 </details>
 
-<details open>
-<summary><b>🔥 热搜榜 - 聚合多平台热点</b></summary>
-<img src="docs/images/hotlist.png" width="800"/>
+<details>
+<summary><b>🔐 登录页面</b></summary>
+
+支持从登录页返回热搜榜，用户登录后按角色进入对应功能。
+
+<img src="docs/images/login.png" width="800"/>
 </details>
 
 <details>
 <summary><b>📡 数据源管理</b></summary>
+
+查看内置数据源，并按分类管理自定义 RSS 源。
+
 <img src="docs/images/sources.png" width="800"/>
 </details>
 
 <details>
 <summary><b>📈 趋势分析 - 排名变化与热度走势</b></summary>
+
 <img src="docs/images/trends.png" width="800"/>
 </details>
 
 <details>
 <summary><b>📨 推送配置 - 多渠道推送</b></summary>
+
+配置 Telegram、Discord、企业微信、飞书、钉钉、邮件、Webhook 等推送渠道，并选择参与推送的数据源。
+
 <img src="docs/images/push-config.png" width="800"/>
 </details>
 
 <details>
 <summary><b>🎯 推送规则 - 智能过滤</b></summary>
+
+配置关键词包含、关键词排除、时间段限制、来源过滤等推送规则。
+
 <img src="docs/images/rules.png" width="800"/>
 </details>
 
 <details>
 <summary><b>📜 推送历史</b></summary>
+
+查看历史推送记录、成功率和推送统计。
+
 <img src="docs/images/history.png" width="800"/>
 </details>
 
 <details>
-<summary><b>⏰ 定时任务</b></summary>
+<summary><b>⏰ 定时任务与 AI 摘要</b></summary>
+
+配置定时摘要、立即推送摘要，并接入 OpenAI、Claude、DeepSeek、Ollama 等模型生成热点摘要。
+
 <img src="docs/images/scheduler.png" width="800"/>
 </details>
 
 <details>
 <summary><b>👥 用户管理</b></summary>
+
+管理员可管理用户账号和角色权限。
+
 <img src="docs/images/users.png" width="800"/>
 </details>
 
@@ -136,7 +165,7 @@ cd hotpush
 # 启动
 docker compose up -d
 
-# 访问 http://localhost:3001
+# 访问 http://localhost:3001，未登录即可查看热搜榜
 ```
 
 > ⚠️ **重要**：项目自带 RSSHub 实例，部分数据源需要配置 Cookie 才能正常使用，详见 [Cookie 配置说明](#-cookie-配置)
@@ -188,7 +217,7 @@ npm install
 # 启动开发服务器
 npm run dev
 
-# 访问 http://localhost:3000
+# 访问 http://localhost:3000，未登录即可查看热搜榜
 ```
 
 ## 📖 API 文档
@@ -197,17 +226,27 @@ npm run dev
 
 ### 主要接口
 
+公开接口：
+
+| 接口 | 方法 | 说明 |
+|------|------|------|
+| `/api/hot/stream` | GET | 流式获取热榜，前端热搜榜默认使用 |
+| `/api/hot` | GET | 获取所有热榜 |
+| `/api/hot/{source_id}` | GET | 获取指定热榜 |
+| `/api/stats` | GET | 获取基础统计信息 |
+
+登录后接口：
+
 | 接口 | 方法 | 说明 |
 |------|------|------|
 | `/api/sources` | GET | 获取所有热榜源 |
-| `/api/categories` | GET | 获取分类列表 |
-| `/api/hot/{source_id}` | GET | 获取指定热榜 |
-| `/api/hot` | GET | 获取所有热榜 |
+| `/api/sources/custom` | GET/POST | 管理自定义 RSS 源 |
 | `/api/trends/ranking/{source_id}` | GET | 获取排名变化趋势 |
-| `/api/trends/popularity/{source_id}` | GET | 获取热度走势 |
-| `/api/push/channels` | GET | 获取推送渠道状态 |
-| `/api/push/test` | POST | 测试推送 |
-| `/api/fetch/trigger` | POST | 手动触发抓取 |
+| `/api/config/push` | GET/POST | 管理推送渠道 |
+| `/api/rules` | GET/POST | 管理推送规则 |
+| `/api/history` | GET | 查看推送历史 |
+| `/api/scheduler/status` | GET | 查看定时任务状态 |
+| `/api/users` | GET | 用户管理（管理员） |
 
 ## 🍪 Cookie 配置
 
@@ -270,7 +309,8 @@ rsshub:
 
 | 模块 | 说明 |
 |------|------|
-| **热搜榜** | 聚合展示各平台热点，支持按分类筛选，实时刷新 |
+| **公开热搜榜** | 访问首页即可浏览各平台热点，支持按分类筛选和实时刷新 |
+| **登录与权限** | 未登录只展示热搜榜；登录后按测试用户、普通用户、管理员角色开放功能 |
 | **数据源** | 管理内置数据源，支持添加自定义 RSS 源 |
 | **趋势分析** | 可视化各平台热搜排名变化趋势和热度走势，支持时间范围筛选 |
 | **推送配置** | 配置 Telegram、Discord、企业微信等推送渠道 |
@@ -285,6 +325,7 @@ rsshub:
 - [x] MVP：热点聚合 + 基础推送
 - [x] Vue 前端管理界面
 - [x] 用户系统 + 权限管理
+- [x] 公开热搜榜，未登录可浏览
 - [x] 推送规则（关键词过滤、时间段限制）
 - [x] 自定义数据源（RSS）
 - [x] Redis 缓存
