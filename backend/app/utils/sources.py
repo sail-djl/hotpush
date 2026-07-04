@@ -30,6 +30,12 @@ HOT_SOURCES = {
         "icon": _icon("zhihu"),
         "category": "热搜榜"
     },
+    "baidu": {
+        "name": "百度热搜",
+        "route": "/baidu/top/realtime",
+        "icon": _icon("baidu"),
+        "category": "热搜榜"
+    },
     "bilibili": {
         "name": "B站热搜",
         "route": "/bilibili/hot-search",
@@ -111,8 +117,8 @@ SOURCES_REQUIRE_CONFIG = {}
 
 # 分类汇总
 CATEGORIES = {
-    "热搜榜": ["weibo", "zhihu"],
-    "技术": ["v2ex", "hackernews", "juejin", "nodeseek"],
+    "热搜榜": ["weibo", "zhihu", "baidu"],
+    "技术": ["v2ex", "hackernews", "juejin", "linuxdo", "nodeseek"],
     "科技资讯": ["sspai", "ithome"],
     "视频": ["bilibili"],
     "影视": ["douban_movie"],

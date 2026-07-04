@@ -11,7 +11,8 @@ const SOURCE_ICON_FALLBACKS = {
     douban_movie: '🎬',
     douban_book: '📚',
     zaobao: '🌏',
-    thepaper: '📰'
+    thepaper: '📰',
+    baidu: '🔍'
 }
 
 export const isImageIcon = (icon) => {
