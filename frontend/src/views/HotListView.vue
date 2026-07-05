@@ -155,8 +155,8 @@ const categories = ['全部', '热搜榜', '技术', '科技资讯', '视频', '
 // Category mapping - 和旧版本保持一致
 const categoryMap = {
     '热搜榜': ['weibo', 'zhihu'],
-    '技术': ['v2ex', 'hackernews', 'juejin', 'linuxdo', 'nodeseek', 'nodeweekly', 'ruanyifeng'],
-    '科技资讯': ['sspai', 'ifanr'],
+    '技术': ['v2ex', 'hackernews', 'juejin', 'nodeseek', 'nodeweekly', 'ruanyifeng'],
+    '科技资讯': ['sspai', 'ithome', 'ifanr'],
     '视频': ['bilibili'],
     '影视': ['douban_movie'],
     '阅读': ['douban_book'],

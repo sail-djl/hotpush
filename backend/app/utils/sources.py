@@ -56,11 +56,11 @@ HOT_SOURCES = {
         "icon": _icon("juejin"),
         "category": "技术"
     },
-    "linuxdo": {
-        "name": "Linux DO",
-        "route": "https://linux.do/latest.rss",
-        "icon": _icon("linuxdo"),
-        "category": "技术"
+    "ithome": {
+        "name": "IT之家热榜",
+        "route": "/ithome/ranking/24h",
+        "icon": _icon("ithome"),
+        "category": "科技资讯"
     },
     "nodeseek": {
         "name": "NodeSeek",
@@ -112,8 +112,8 @@ SOURCES_REQUIRE_CONFIG = {}
 # 分类汇总
 CATEGORIES = {
     "热搜榜": ["weibo", "zhihu"],
-    "技术": ["v2ex", "hackernews", "juejin", "linuxdo", "nodeseek"],
-    "科技资讯": ["sspai"],
+    "技术": ["v2ex", "hackernews", "juejin", "nodeseek"],
+    "科技资讯": ["sspai", "ithome"],
     "视频": ["bilibili"],
     "影视": ["douban_movie"],
     "阅读": ["douban_book"],

@@ -5,7 +5,7 @@ const SOURCE_ICON_FALLBACKS = {
     v2ex: '💻',
     hackernews: '🔶',
     juejin: '💎',
-    linuxdo: '🐧',
+    ithome: '💻',
     nodeseek: '🌐',
     sspai: '📱',
     douban_movie: '🎬',
