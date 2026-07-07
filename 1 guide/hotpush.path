@@ -1,0 +1,223 @@
+# HotPush 项目上下文
+
+## 项目概述
+
+项目名称：HotPush
+应用描述：热点聚合推送平台 - 聚合全网热点，主动推送到指定平台
+当前版本：0.5.0
+开源协议：MIT
+项目仓库：https://github.com/sail-djl/hotpush.git
+
+## 技术栈
+
+### 后端
+
+语言：Python 3.11+
+框架：FastAPI 0.109+
+ASGI服务器：Uvicorn
+ORM：PyMySQL + 原生 SQL
+任务调度：APScheduler
+RSS解析：feedparser
+HTTP客户端：httpx
+AI集成：LiteLLM
+认证：JWT + bcrypt
+
+### 前端
+
+框架：Vue 3.4+
+构建工具：Vite 5
+UI框架：Tailwind CSS 3.4
+状态管理：Pinia 2.1+
+路由：Vue Router 4.2+
+图表：Chart.js 4.5 + vue-chartjs 5.3
+
+### 数据库
+
+主数据库：MySQL 8.0+
+缓存：Redis 6.0+（可选）
+字符集：utf8mb4
+
+### 数据源
+
+RSS引擎：RSSHub
+支持平台：微博、知乎、B站、V2EX、Hacker News、掘金、IT之家、NodeSeek、少数派、豆瓣、联合早报、澎湃新闻
+
+## 目录结构
+
+```
+hotpush/
+├── backend/                    # 后端服务
+│   ├── app/                   # 应用代码
+│   │   ├── middleware/        # 中间件（认证）
+│   │   ├── models/           # 数据模型（schemas）
+│   │   ├── routers/          # API 路由
+│   │   ├── services/         # 业务逻辑
+│   │   └── utils/            # 工具函数
+│   ├── tests/                # 测试用例
+│   ├── requirements.txt      # Python 依赖
+│   └── Dockerfile            # 后端容器配置
+├── frontend/                   # 前端应用
+│   ├── src/                  # 源代码
+│   │   ├── components/       # Vue 组件
+│   │   ├── composables/      # 组合式函数
+│   │   ├── router/           # 路由配置
+│   │   ├── stores/           # Pinia 状态
+│   │   ├── utils/            # 工具函数
+│   │   └── views/            # 页面视图
+│   ├── package.json          # 前端依赖
+│   └── Dockerfile            # 前端容器配置
+├── docs/                       # 项目文档
+├── docker-compose.yml          # Docker Compose 配置
+└── README.md                   # 项目说明
+```
+
+## Docker 部署配置
+
+### 服务端口
+
+| 服务 | 容器端口 | 主机端口 | 说明 |
+|------|----------|----------|------|
+| frontend | 80 | 3001 | 前端访问入口 |
+| backend | 8000 | - | 内部服务 |
+| mysql | 3306 | - | 内部服务 |
+| redis | 6379 | - | 内部服务 |
+| rsshub | 1200 | 1200 | RSS数据源 |
+
+### 环境变量配置
+
+**必需配置：**
+- DATABASE_URL：MySQL 连接 URL
+- ADMIN_USERNAME：管理员用户名（默认 admin）
+- ADMIN_PASSWORD：管理员密码（必须修改）
+- JWT_SECRET：JWT 密钥（必须修改为随机字符串）
+
+**可选配置：**
+- REDIS_URL：Redis 连接 URL
+- RSSHUB_URL：RSSHub 实例地址
+- AI_MODEL / AI_API_KEY / AI_BASE_URL：AI 摘要配置
+- TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID：Telegram 推送
+- DISCORD_WEBHOOK_URL：Discord 推送
+- WECOM_WEBHOOK_URL：企业微信推送
+- FEISHU_WEBHOOK_URL：飞书推送
+- DINGTALK_WEBHOOK_URL：钉钉推送
+
+### RSSHub Cookie 配置
+
+部分数据源需要配置 Cookie 才能正常使用：
+
+| 数据源 | 环境变量 | 是否必须 |
+|--------|----------|----------|
+| 微博热搜 | WEIBO_COOKIE | 推荐 |
+| B站热搜 | BILIBILI_COOKIE | 推荐 |
+
+## 核心配置文件
+
+| 文件 | 说明 |
+|------|------|
+| backend/app/config.py | 后端配置（Pydantic Settings） |
+| backend/.env.example | 后端环境变量模板 |
+| frontend/vite.config.js | 前端构建配置 |
+| frontend/tailwind.config.js | Tailwind CSS 配置 |
+| docker-compose.yml | Docker 编排配置 |
+
+## API 接口
+
+### 公开接口（无需登录）
+
+| 接口 | 方法 | 说明 |
+|------|------|------|
+| /api/hot/stream | GET | 流式获取热榜 |
+| /api/hot | GET | 获取所有热榜 |
+| /api/hot/{source_id} | GET | 获取指定热榜 |
+| /api/stats | GET | 获取基础统计信息 |
+
+### 登录后接口
+
+| 接口 | 方法 | 说明 |
+|------|------|------|
+| /api/sources | GET | 获取所有热榜源 |
+| /api/sources/custom | GET/POST | 管理自定义 RSS 源 |
+| /api/trends/ranking/{source_id} | GET | 获取排名变化趋势 |
+| /api/config/push | GET/POST | 管理推送渠道 |
+| /api/rules | GET/POST | 管理推送规则 |
+| /api/history | GET | 查看推送历史 |
+| /api/scheduler/status | GET | 查看定时任务状态 |
+| /api/users | GET | 用户管理（管理员） |
+
+## 数据库表
+
+| 表名 | 说明 |
+|------|------|
+| pushed_items | 已推送记录 |
+| fetch_records | 抓取记录 |
+| settings | 系统设置 |
+| push_channels | 推送渠道配置 |
+| custom_sources | 自定义数据源 |
+| push_rules | 推送规则 |
+| push_history | 推送历史 |
+| users | 用户表 |
+| hot_item_snapshots | 热搜快照 |
+
+## 前端路由
+
+| 路径 | 页面 | 说明 |
+|------|------|------|
+| / | HotListView | 热搜榜（公开） |
+| /login | LoginPage | 登录页 |
+| /sources | DataSourcesView | 数据源管理 |
+| /trends | TrendView | 趋势分析 |
+| /push-config | PushConfigView | 推送配置 |
+| /rules | PushRulesView | 推送规则 |
+| /history | PushHistoryView | 推送历史 |
+| /scheduler | SchedulerView | 定时任务 |
+| /users | UserManagementView | 用户管理 |
+
+## 启动命令
+
+### Docker 部署（推荐）
+
+```bash
+cd hotpush
+docker compose up -d
+# 访问 http://localhost:3001
+```
+
+### 本地开发
+
+**后端：**
+```bash
+cd backend
+python -m venv venv
+venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+cp .env.example .env
+uvicorn app.main:app --reload --port 8000
+```
+
+**前端：**
+```bash
+cd frontend
+npm install
+npm run dev
+# 访问 http://localhost:5173
+```
+
+## 默认账号
+
+- 用户名：admin
+- 密码：admin123（Docker 部署需在 docker-compose.yml 中修改）
+
+## 注意事项
+
+1. JWT_SECRET 必须修改为随机字符串，否则重启后登录会失效
+2. 生产环境必须修改 ADMIN_PASSWORD
+3. 部分数据源（微博、B站）需要配置 Cookie 才能正常获取数据
+4. Redis 为可选组件，不配置时功能正常但无缓存
+5. AI 摘要功能需要配置对应的 API Key
+
+## 相关资源
+
+- RSSHub 文档：https://docs.rsshub.app
+- FastAPI 文档：https://fastapi.tiangolo.com
+- Vue 3 文档：https://vuejs.org
+- Tailwind CSS 文档：https://tailwindcss.com

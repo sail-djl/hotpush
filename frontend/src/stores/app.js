@@ -8,6 +8,11 @@ export const useAppStore = defineStore('app', () => {
     const stats = ref({ sources_count: 13, configured_channels: 0 })
     const lastUpdate = ref('')
     const refreshTrigger = ref(0)
+    
+    // 每个数据源展示的条数，默认 10，持久化到 localStorage
+    const itemsPerSource = ref(
+        parseInt(localStorage.getItem('hotpush_items_per_source') || '10')
+    )
 
     // Actions
     const fetchStats = async () => {
@@ -36,12 +41,20 @@ export const useAppStore = defineStore('app', () => {
         updateLastRefresh()
     }
 
+    // 设置每个数据源展示的条数
+    const setItemsPerSource = (count) => {
+        itemsPerSource.value = count
+        localStorage.setItem('hotpush_items_per_source', String(count))
+    }
+
     return {
         stats,
         lastUpdate,
         refreshTrigger,
+        itemsPerSource,
         fetchStats,
         updateLastRefresh,
-        triggerRefresh
+        triggerRefresh,
+        setItemsPerSource
     }
 })

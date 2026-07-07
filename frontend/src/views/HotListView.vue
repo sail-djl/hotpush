@@ -1,15 +1,36 @@
 <template>
     <div>
         <!-- Category Tabs -->
-        <div class="category-container rounded-xl p-2 mb-6 inline-flex flex-wrap gap-2">
-            <button
-                v-for="cat in categories"
-                :key="cat"
-                @click="activeCategory = cat"
-                :class="['category-chip', activeCategory === cat ? 'active' : '']"
-            >
-                {{ cat }}
-            </button>
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+            <div class="category-container rounded-xl p-2 inline-flex flex-wrap gap-2">
+                <button
+                    v-for="cat in categories"
+                    :key="cat"
+                    @click="activeCategory = cat"
+                    :class="['category-chip', activeCategory === cat ? 'active' : '']"
+                >
+                    {{ cat }}
+                </button>
+            </div>
+            
+            <!-- 每源条数选择 -->
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-400">每源条数：</span>
+                <label
+                    v-for="opt in [10, 15, 20]"
+                    :key="opt"
+                    class="flex items-center gap-1 cursor-pointer"
+                >
+                    <input
+                        type="radio"
+                        :value="opt"
+                        :checked="itemsPerSource === opt"
+                        @change="setItemsPerSource(opt)"
+                        class="w-3.5 h-3.5 text-amber-500 bg-white/10 border-gray-500 focus:ring-amber-500 focus:ring-offset-0"
+                    />
+                    <span class="text-sm text-gray-300">{{ opt }}</span>
+                </label>
+            </div>
         </div>
 
         <!-- Loading Progress -->
@@ -111,7 +132,7 @@
                 <!-- Card Content -->
                 <ul class="p-4 space-y-2">
                     <li
-                        v-for="(item, index) in (hotList.items || []).slice(0, 10)"
+                        v-for="(item, index) in (hotList.items || []).slice(0, itemsPerSource)"
                         :key="item.id || index"
                         class="hot-item flex items-start space-x-3 group cursor-pointer"
                         @click="openLink(item.url)"
@@ -140,6 +161,7 @@ import { getSourceFallbackIcon, isImageIcon } from '../utils/sourceIcons'
 
 const { API_BASE, authToken, getHeaders } = useApi()
 const appStore = useAppStore()
+const { itemsPerSource, setItemsPerSource } = appStore
 
 // State
 const hotLists = ref([])
