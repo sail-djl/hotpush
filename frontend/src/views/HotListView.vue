@@ -23,9 +23,10 @@
                 >
                     <input
                         type="radio"
+                        name="itemsPerSource"
                         :value="opt"
-                        :checked="itemsPerSource === opt"
-                        @change="setItemsPerSource(opt)"
+                        v-model="itemsPerSource"
+                        @change="setItemsPerSource(itemsPerSource)"
                         class="w-3.5 h-3.5 text-amber-500 bg-white/10 border-gray-500 focus:ring-amber-500 focus:ring-offset-0"
                     />
                     <span class="text-sm text-gray-300">{{ opt }}</span>
